@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Management Dashboard - SAJX CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --primary-blue: #0A84FF;
+      --secondary-blue: #0057D9;
+      --premium-black: #050505;
+      --white: #FFFFFF;
+      --light-gray: #D9D9D9;
+      --dark-gray: #444444;
+      --green: #1d9e75;
+      --green-dim: rgba(29, 158, 117, 0.1);
+      --amber: #e4a020;
+      --amber-dim: rgba(228, 160, 32, 0.1);
+      --red: #ff3b30;
+      --red-dim: rgba(255, 59, 48, 0.1);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f5f7ff;
+      color: var(--premium-black);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .header h1 {
+      font-size: 2em;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9em;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10, 132, 255, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary-blue);
+      border: 1.5px solid var(--primary-blue);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(10, 132, 255, 0.05);
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--light-gray);
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--dark-gray);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.95em;
+    }
+
+    .tab-btn.active {
+      color: var(--primary-blue);
+      border-bottom-color: var(--primary-blue);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* ANALYTICS GRID */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .metric-label {
+      font-size: 0.85em;
+      color: var(--dark-gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      font-size: 2em;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .metric-subtext {
+      font-size: 0.8em;
+      color: var(--dark-gray);
+    }
+
+    /* CHARTS */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .chart-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .chart-title {
+      font-size: 0.95em;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--premium-black);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+
+    /* REVIEWS LIST */
+    .reviews-list {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .review-item {
+      padding: 20px;
+      border-bottom: 1px solid var(--light-gray);
+      transition: var(--transition);
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+    }
+
+    .review-item:hover {
+      background: #fafafa;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .review-customer {
+      font-weight: 600;
+      color: var(--premium-black);
+    }
+
+    .review-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 0.85em;
+      color: var(--dark-gray);
+      flex-wrap: wrap;
+    }
+
+    .rating-stars {
+      color: #FFB800;
+      font-size: 1.1em;
+      letter-spacing: 2px;
+    }
+
+    .sentiment-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75em;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sentiment-badge.positive {
+      background: var(--green-dim);
+      color: var(--green);
+    }
+
+    .sentiment-badge.neutral {
+      background: var(--amber-dim);
+      color: var(--amber);
+    }
+
+    .sentiment-badge.negative {
+      background: var(--red-dim);
+      color: var(--red);
+    }
+
+    .fraud-badge {
+      background: var(--red-dim);
+      color: var(--red);
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75em;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .review-text {
+      color: var(--premium-black);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      font-size: 0.95em;
+    }
+
+    .review-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .review-actions button {
+      padding: 8px 12px;
+      font-size: 0.85em;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.3s ease-out;
+    }
+
+    .modal-header {
+      font-size: 1.3em;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--premium-black);
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+      color: var(--dark-gray);
+      line-height: 1.6;
+    }
+
+    .modal-body textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95em;
+      min-height: 100px;
+      margin-bottom: 12px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .modal-actions button {
+      padding: 10px 16px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        max-width: 95%;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .tabs {
+        overflow-x: auto;
+      }
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--dark-gray);
+    }
+
+    .spinner {
+      border: 4px solid var(--light-gray);
+      border-top: 4px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--dark-gray);
+    }
+
+    .empty-state h3 {
+      margin-bottom: 8px;
+      color: var(--premium-black);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>📊 Review Management Dashboard</h1>
+      <div class="header-actions">
+        <button class="btn-secondary" onclick="refreshData()">🔄 Refresh</button>
+        <button class="btn-primary" onclick="exportReviews()">⬇️ Export</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('analytics')">📈 Analytics</button>
+      <button class="tab-btn" onclick="switchTab('pending')">⏳ Pending Reviews</button>
+      <button class="tab-btn" onclick="switchTab('approved')">✓ Approved Reviews</button>
+      <button class="tab-btn" onclick="switchTab('testimonials')">⭐ Testimonials</button>
+      <button class="tab-btn" onclick="switchTab('fraud')">🚨 Fraud Alerts</button>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div id="analytics" class="tab-content active">
+      <div class="analytics-grid" id="metricsContainer">
+        <div class="metric-card">
+          <div class="metric-label">Total Reviews</div>
+          <div class="metric-value" id="totalReviews">-</div>
+          <div class="metric-subtext">All time</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Avg Rating</div>
+          <div class="metric-value" id="avgRating">-</div>
+          <div class="metric-subtext">/5.0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">NPS Score</div>
+          <div class="metric-value" id="npsScore">-</div>
+          <div class="metric-subtext">Net Promoter</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Positive %</div>
+          <div class="metric-value" id="positivePct">-</div>
+          <div class="metric-subtext">Sentiment</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">Sentiment Distribution</div>
+          <div class="chart-container">
+            <canvas id="sentimentChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Rating Distribution</div>
+          <div class="chart-container">
+            <canvas id="ratingChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Top Reviewed Products</div>
+        <div class="chart-container">
+          <canvas id="productsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- PENDING REVIEWS TAB -->
+    <div id="pending" class="tab-content">
+      <div class="reviews-list" id="pendingReviewsList">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading pending reviews...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPROVED REVIEWS TAB -->
+    <div id="approved" class="tab-content">
+      <div class="reviews-list" id="approvedReviewsList">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading approved reviews...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTIMONIALS TAB -->
+    <div id="testimonials" class="tab-content">
+      <div class="reviews-list" id="testimonialsList">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading testimonials...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAUD ALERTS TAB -->
+    <div id="fraud" class="tab-content">
+      <div class="reviews-list" id="fraudAlertsList">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading fraud alerts...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPLY MODAL -->
+  <div id="replyModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Reply to Review</div>
+      <div class="modal-body">
+        <p id="customerInfo"></p>
+        <textarea id="replyText" placeholder="Write your professional response here..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeReplyModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitReply()">Send Reply</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbzmmVtscGaAOAAt4z21yIKO9Fo5lS2XEuVbaZ-xJv-qtUGqCO_-z-0XslrK6gsrAWHm/exec"; // Replace with your Apps Script deployment URL
+    let currentReviewRow = null;
+    let allReviews = [];
+    let analyticsData = null;
+    let sentimentChart = null;
+    let ratingChart = null;
+    let productsChart = null;
+
+    // Initialize Dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      refreshData();
+      setInterval(refreshData, 60000); // Refresh every minute
+    });
+
+    // Switch Tab
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Deactivate all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+
+      // Load data for the tab
+      if (tabName === 'pending') loadPendingReviews();
+      if (tabName === 'approved') loadApprovedReviews();
+      if (tabName === 'testimonials') loadTestimonials();
+    }
+
+    // Refresh All Data
+    async function refreshData() {
+      await loadAnalytics();
+      await loadPendingReviews();
+    }
+
+    // Load Analytics
+    async function loadAnalytics() {
+      try {
+        const response = await fetch(`${API_ENDPOINT}?action=getAnalytics`);
+        analyticsData = await response.json();
+
+        // Update metrics
+        document.getElementById('totalReviews').textContent = analyticsData.totalReviews;
+        document.getElementById('avgRating').textContent = analyticsData.averageRating;
+        document.getElementById('npsScore').textContent = analyticsData.npsScore;
+        document.getElementById('positivePct').textContent = analyticsData.sentimentPercentage.positive + '%';
+
+        // Create charts
+        createSentimentChart();
+        createRatingChart();
+        createProductsChart();
+      } catch (error) {
+        console.error('Error loading analytics:', error);
+      }
+    }
+
+    // Create Sentiment Chart
+    function createSentimentChart() {
+      const ctx = document.getElementById('sentimentChart').getContext('2d');
+      if (sentimentChart) sentimentChart.destroy();
+
+      sentimentChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Positive', 'Neutral', 'Negative'],
+          datasets: [{
+            data: [
+              analyticsData.sentimentBreakdown.positive,
+              analyticsData.sentimentBreakdown.neutral,
+              analyticsData.sentimentBreakdown.negative
+            ],
+            backgroundColor: ['#1d9e75', '#e4a020', '#ff3b30'],
+            borderColor: '#fff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { family: "'DM Sans', sans-serif" } } }
+          }
+        }
+      });
+    }
+
+    // Create Rating Chart
+    function createRatingChart() {
+      const ctx = document.getElementById('ratingChart').getContext('2d');
+      if (ratingChart) ratingChart.destroy();
+
+      ratingChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['1⭐', '2⭐', '3⭐', '4⭐', '5⭐'],
+          datasets: [{
+            label: 'Reviews',
+            data: [0, 0, 0, 0, 0], // Will be populated from actual data
+            backgroundColor: '#0A84FF',
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    // Create Products Chart
+    function createProductsChart() {
+      const ctx = document.getElementById('productsChart').getContext('2d');
+      if (productsChart) productsChart.destroy();
+
+      productsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: analyticsData.topProducts.map(p => p.product),
+          datasets: [{
+            label: 'Review Count',
+            data: analyticsData.topProducts.map(p => p.count),
+            backgroundColor: '#0A84FF',
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    // Load Pending Reviews
+    async function loadPendingReviews() {
+      try {
+        const response = await fetch(`${API_ENDPOINT}?action=getPendingReviews`);
+        const reviews = await response.json();
+        const container = document.getElementById('pendingReviewsList');
+
+        if (reviews.length === 0) {
+          container.innerHTML = '<div class="empty-state"><h3>✓ No Pending Reviews</h3><p>All reviews have been reviewed!</p></div>';
+          return;
+        }
+
+        container.innerHTML = reviews.map((review, index) => `
+          <div class="review-item">
+            <div class="review-header">
+              <div>
+                <div class="review-customer">${review.clientName}</div>
+                <div class="review-meta">
+                  <span>Order: ${review.orderId}</span>
+                  <span class="rating-stars">${'⭐'.repeat(review.rating)}</span>
+                  <span class="sentiment-badge ${review.sentiment.toLowerCase()}">${review.sentiment}</span>
+                  ${review.fraudFlag === 'TRUE' ? '<span class="fraud-badge">⚠ FRAUD</span>' : ''}
+                </div>
+              </div>
+            </div>
+            <div class="review-text">"${review.review}"</div>
+            <div class="review-actions">
+              <button class="btn-success" onclick="approveReview(${review.rowIndex})">✓ Approve</button>
+              <button class="btn-danger" onclick="rejectReview(${review.rowIndex})">✕ Reject</button>
+              <button class="btn-primary" onclick="openReplyModal(${review.rowIndex}, '${review.clientName}')">💬 Reply</button>
+              <button class="btn-secondary" onclick="markTestimonial(${review.rowIndex})">⭐ Featured</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading pending reviews:', error);
+      }
+    }
+
+    // Load Approved Reviews
+    async function loadApprovedReviews() {
+      try {
+        const response = await fetch(`${API_ENDPOINT}?action=getAnalytics`);
+        const data = await response.json();
+        // Implementation for showing approved reviews
+      } catch (error) {
+        console.error('Error loading approved reviews:', error);
+      }
+    }
+
+    // Load Testimonials
+    async function loadTestimonials() {
+      try {
+        const response = await fetch(`${API_ENDPOINT}?action=getTestimonials`);
+        const testimonials = await response.json();
+        const container = document.getElementById('testimonialsList');
+
+        if (testimonials.length === 0) {
+          container.innerHTML = '<div class="empty-state"><h3>No Testimonials Yet</h3><p>Mark approved reviews as testimonials to feature them here.</p></div>';
+          return;
+        }
+
+        container.innerHTML = testimonials.map(t => `
+          <div class="review-item">
+            <div class="review-customer">${t.clientID}</div>
+            <div class="review-meta">
+              <span>${t.product}</span>
+              <span class="rating-stars">${'⭐'.repeat(t.rating)}</span>
+            </div>
+            <div class="review-text">"${t.review}"</div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading testimonials:', error);
+      }
+    }
+
+    // Approve Review
+    async function approveReview(rowIndex) {
+      if (!confirm('Approve this review?')) return;
+
+      try {
+        await fetch(API_ENDPOINT, {
+          method: 'POST',
+          body: new URLSearchParams({
+            action: 'approveReview',
+            rowIndex: rowIndex
+          })
+        });
+
+        loadPendingReviews();
+        loadAnalytics();
+      } catch (error) {
+        alert('Error approving review: ' + error.message);
+      }
+    }
+
+    // Reject Review
+    async function rejectReview(rowIndex) {
+      const reason = prompt('Reason for rejection:');
+      if (!reason) return;
+
+      try {
+        await fetch(API_ENDPOINT, {
+          method: 'POST',
+          body: new URLSearchParams({
+            action: 'rejectReview',
+            rowIndex: rowIndex,
+            reason: reason
+          })
+        });
+
+        loadPendingReviews();
+      } catch (error) {
+        alert('Error rejecting review: ' + error.message);
+      }
+    }
+
+    // Open Reply Modal
+    function openReplyModal(rowIndex, customerName) {
+      currentReviewRow = rowIndex;
+      document.getElementById('customerInfo').textContent = `Replying to ${customerName}`;
+      document.getElementById('replyText').value = '';
+      document.getElementById('replyModal').classList.add('show');
+    }
+
+    // Close Reply Modal
+    function closeReplyModal() {
+      document.getElementById('replyModal').classList.remove('show');
+    }
+
+    // Submit Reply
+    async function submitReply() {
+      const reply = document.getElementById('replyText').value.trim();
+      if (!reply) {
+        alert('Please write a reply');
+        return;
+      }
+
+      try {
+        await fetch(API_ENDPOINT, {
+          method: 'POST',
+          body: new URLSearchParams({
+            action: 'addAdminReply',
+            rowIndex: currentReviewRow,
+            reply: reply
+          })
+        });
+
+        closeReplyModal();
+        loadPendingReviews();
+      } catch (error) {
+        alert('Error submitting reply: ' + error.message);
+      }
+    }
+
+    // Mark as Testimonial
+    async function markTestimonial(rowIndex) {
+      try {
+        await fetch(API_ENDPOINT, {
+          method: 'POST',
+          body: new URLSearchParams({
+            action: 'markAsTestimonial',
+            rowIndex: rowIndex
+          })
+        });
+
+        loadPendingReviews();
+      } catch (error) {
+        alert('Error marking testimonial: ' + error.message);
+      }
+    }
+
+    // Export Reviews
+    function exportReviews() {
+      alert('Export functionality will be implemented with CSV export');
+    }
+  </script>
+</body>
+</html>

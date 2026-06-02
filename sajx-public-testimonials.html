@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What Our Clients Say - SAJX CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary-blue: #0A84FF;
+      --secondary-blue: #0057D9;
+      --premium-black: #050505;
+      --white: #FFFFFF;
+      --light-gray: #D9D9D9;
+      --dark-gray: #444444;
+      --green: #1d9e75;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%);
+      color: var(--premium-black);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    .section-header h2 {
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-header p {
+      font-size: 1.1em;
+      color: var(--dark-gray);
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* TESTIMONIALS SLIDER */
+    .testimonials-wrapper {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .testimonials-slider {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      overflow: hidden;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      animation: slideInUp 0.6s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      font-size: 80px;
+      color: var(--primary-blue);
+      opacity: 0.1;
+      font-weight: 700;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .testimonial-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .testimonial-text {
+      font-size: 1em;
+      line-height: 1.8;
+      color: var(--premium-black);
+      margin-bottom: 20px;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .testimonial-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 20px;
+      border-top: 1px solid var(--light-gray);
+    }
+
+    .testimonial-author {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: var(--premium-black);
+      font-size: 0.95em;
+    }
+
+    .author-product {
+      font-size: 0.8em;
+      color: var(--dark-gray);
+    }
+
+    .testimonial-rating {
+      font-size: 1.2em;
+      color: #FFB800;
+      letter-spacing: 3px;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(29, 158, 117, 0.1);
+      border-radius: 6px;
+      font-size: 0.75em;
+      color: var(--green);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    /* CAROUSEL CONTROLS */
+    .carousel-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .carousel-btn {
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid var(--primary-blue);
+      background: transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      font-size: 1.2em;
+    }
+
+    .carousel-btn:hover {
+      background: var(--primary-blue);
+      color: var(--white);
+    }
+
+    .carousel-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--light-gray);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .carousel-dot.active {
+      background: var(--primary-blue);
+      width: 24px;
+      border-radius: 5px;
+    }
+
+    /* STATS SECTION */
+    .stats-section {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      border-radius: 16px;
+      padding: 48px 32px;
+      color: var(--white);
+      margin-bottom: 60px;
+      animation: fadeInUp 0.6s ease-out 0.2s backwards;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      text-align: center;
+    }
+
+    .stat {
+      animation: counterUp 1s ease-out;
+    }
+
+    .stat-value {
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.95em;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+    /* FEATURED TESTIMONIAL */
+    .featured-testimonial {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      margin-bottom: 60px;
+      animation: fadeInUp 0.6s ease-out;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .featured-quote {
+      flex: 1;
+    }
+
+    .featured-quote h3 {
+      font-size: 1.3em;
+      margin-bottom: 16px;
+      color: var(--primary-blue);
+    }
+
+    .featured-text {
+      font-size: 1.05em;
+      line-height: 1.8;
+      color: var(--premium-black);
+      margin-bottom: 20px;
+    }
+
+    .featured-author {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1.2em;
+    }
+
+    .featured-info h4 {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .featured-info p {
+      font-size: 0.85em;
+      color: var(--dark-gray);
+    }
+
+    /* CTA SECTION */
+    .cta-section {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, rgba(10, 132, 255, 0.05), rgba(0, 87, 217, 0.05));
+      border-radius: 16px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .cta-section h3 {
+      font-size: 1.8em;
+      margin-bottom: 12px;
+      color: var(--premium-black);
+    }
+
+    .cta-section p {
+      font-size: 1em;
+      color: var(--dark-gray);
+      margin-bottom: 24px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10, 132, 255, 0.3);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes counterUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* LOADING STATE */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--dark-gray);
+    }
+
+    .spinner {
+      border: 4px solid var(--light-gray);
+      border-top: 4px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .container {
+        padding: 40px 20px;
+      }
+
+      .section-header h2 {
+        font-size: 2em;
+      }
+
+      .testimonial-card {
+        padding: 24px;
+      }
+
+      .featured-testimonial {
+        flex-direction: column;
+        padding: 24px;
+      }
+
+      .testimonials-slider {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        gap: 24px;
+      }
+
+      .carousel-controls {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="section-header">
+      <h2>⭐ What Our Clients Say</h2>
+      <p>Join hundreds of satisfied customers who have transformed their business with SAJX</p>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section" id="statsSection">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-value" id="statReviews">0</div>
+          <div class="stat-label">Verified Reviews</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statRating">0</div>
+          <div class="stat-label">Average Rating</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statNPS">0</div>
+          <div class="stat-label">NPS Score</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statPositive">0%</div>
+          <div class="stat-label">Positive Sentiment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonials Slider -->
+    <div class="testimonials-wrapper">
+      <div class="testimonials-slider" id="testimonialsGrid">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading testimonials...</p>
+        </div>
+      </div>
+
+      <div class="carousel-controls">
+        <button class="carousel-btn" onclick="previousTestimonial()" id="prevBtn">‹</button>
+        <button class="carousel-btn" onclick="nextTestimonial()" id="nextBtn">›</button>
+      </div>
+
+      <div class="carousel-dots" id="dotsContainer"></div>
+    </div>
+
+    <!-- Featured Testimonial (Rotates) -->
+    <div id="featuredSection" style="display: none;">
+      <div class="featured-testimonial" id="featuredTestimonial">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <h3>Share Your Experience</h3>
+      <p>Have you used SAJX? We'd love to hear from you. Your feedback helps us improve and helps other customers make informed decisions.</p>
+      <a href="sajx-review-form.html" class="cta-button">✍️ Write a Review</a>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbzmmVtscGaAOAAt4z21yIKO9Fo5lS2XEuVbaZ-xJv-qtUGqCO_-z-0XslrK6gsrAWHm/exec"; // Replace with your Apps Script deployment URL
+    let testimonials = [];
+    let currentIndex = 0;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTestimonials();
+      setInterval(rotateTestimonials, 8000); // Auto-rotate every 8 seconds
+    });
+
+    // Load Testimonials
+    async function loadTestimonials() {
+      try {
+        const response = await fetch(`${API_ENDPOINT}?action=getTestimonials`);
+        const data = await response.json();
+
+        // Also load analytics for stats
+        const analyticsResponse = await fetch(`${API_ENDPOINT}?action=getAnalytics`);
+        const analytics = await analyticsResponse.json();
+
+        // Update stats
+        document.getElementById('statReviews').textContent = analytics.totalReviews;
+        document.getElementById('statRating').textContent = (analytics.averageRating || 0).toFixed(1);
+        document.getElementById('statNPS').textContent = (analytics.npsScore || 0).toFixed(0);
+        document.getElementById('statPositive').textContent = analytics.sentimentPercentage.positive;
+
+        testimonials = data;
+
+        if (testimonials.length === 0) {
+          document.getElementById('testimonialsGrid').innerHTML = `
+            <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 60px;">
+              <p style="color: var(--dark-gray);">No testimonials yet. Be the first to share your experience!</p>
+            </div>
+          `;
+          return;
+        }
+
+        renderTestimonials();
+        createDots();
+      } catch (error) {
+        console.error('Error loading testimonials:', error);
+        document.getElementById('testimonialsGrid').innerHTML = `
+          <div style="text-align: center; padding: 60px; color: var(--dark-gray);">
+            Error loading testimonials. Please try again later.
+          </div>
+        `;
+      }
+    }
+
+    // Render Testimonials Grid
+    function renderTestimonials() {
+      const grid = document.getElementById('testimonialsGrid');
+
+      grid.innerHTML = testimonials.map((testimonial, index) => {
+        // Extract initials for avatar
+        const initials = testimonial.clientID.substring(0, 1);
+
+        return `
+          <div class="testimonial-card" style="animation-delay: ${index * 0.1}s">
+            <div class="testimonial-content">
+              <p class="testimonial-text">"${truncateText(testimonial.review, 150)}"</p>
+              <div class="testimonial-meta">
+                <div class="testimonial-author">
+                  <div class="author-name">${testimonial.clientID}</div>
+                  <div class="author-product">${testimonial.product}</div>
+                  <div class="verified-badge">✓ Verified Buyer</div>
+                </div>
+                <div class="testimonial-rating">${'⭐'.repeat(testimonial.rating)}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Create Carousel Dots
+    function createDots() {
+      const dotsContainer = document.getElementById('dotsContainer');
+      dotsContainer.innerHTML = '';
+
+      for (let i = 0; i < Math.ceil(testimonials.length / 3); i++) {
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    // Rotate Testimonials
+    function rotateTestimonials() {
+      currentIndex = (currentIndex + 1) % Math.ceil(testimonials.length / 3);
+      updateDots();
+    }
+
+    // Next Testimonial
+    function nextTestimonial() {
+      currentIndex = (currentIndex + 1) % Math.ceil(testimonials.length / 3);
+      updateDots();
+    }
+
+    // Previous Testimonial
+    function previousTestimonial() {
+      currentIndex = (currentIndex - 1 + Math.ceil(testimonials.length / 3)) % Math.ceil(testimonials.length / 3);
+      updateDots();
+    }
+
+    // Go to Slide
+    function goToSlide(index) {
+      currentIndex = index;
+      updateDots();
+    }
+
+    // Update Dots
+    function updateDots() {
+      document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentIndex);
+      });
+    }
+
+    // Truncate Text
+    function truncateText(text, length) {
+      if (text.length <= length) return text;
+      return text.substring(0, length) + '...';
+    }
+  </script>
+</body>
+</html>
