@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partagez Votre Avis - SAJX CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  
+  <style>
+    :root {
+      --primary-blue: #0A84FF;
+      --secondary-blue: #0057D9;
+      --premium-black: #050505;
+      --white: #FFFFFF;
+      --light-gray: #D9D9D9;
+      --dark-gray: #444444;
+      --green: #1d9e75;
+      --green-dim: rgba(29, 158, 117, 0.1);
+      --amber: #e4a020;
+      --amber-dim: rgba(228, 160, 32, 0.1);
+      --red: #ff3b30;
+      --red-dim: rgba(255, 59, 48, 0.1);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--premium-black);
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: slideDown 0.6s ease-out;
+    }
+
+    .header h1 {
+      font-size: 2em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      font-size: 0.95em;
+      color: var(--dark-gray);
+      font-weight: 400;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      animation: slideUp 0.6s ease-out;
+    }
+
+    .form-group {
+      margin-bottom: 28px;
+    }
+
+    .form-group.full-width {
+      margin-bottom: 28px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-card {
+        padding: 24px;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.9em;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--premium-black);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .required {
+      color: var(--red);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95em;
+      color: var(--premium-black);
+      background: #fafafa;
+      transition: var(--transition);
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* STAR RATING */
+    .star-rating {
+      display: flex;
+      gap: 12px;
+      font-size: 0;
+      margin-bottom: 20px;
+    }
+
+    .star {
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      border: 2px solid var(--light-gray);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: #fafafa;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .star:hover {
+      border-color: var(--primary-blue);
+      background: rgba(10, 132, 255, 0.05);
+      transform: scale(1.05);
+    }
+
+    .star.active {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      border-color: #FFB800;
+      box-shadow: 0 4px 12px rgba(255, 168, 0, 0.3);
+    }
+
+    .star-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark-gray);
+      margin-top: 4px;
+      text-align: center;
+      display: block;
+    }
+
+    /* NPS SCORE */
+    .nps-scale {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .nps-btn {
+      padding: 10px;
+      border: 1.5px solid var(--light-gray);
+      border-radius: 8px;
+      background: #fafafa;
+      color: var(--premium-black);
+      font-weight: 600;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .nps-btn:hover {
+      border-color: var(--primary-blue);
+      background: rgba(10, 132, 255, 0.05);
+    }
+
+    .nps-btn.active {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: var(--white);
+      border-color: var(--secondary-blue);
+    }
+
+    .nps-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8em;
+      color: var(--dark-gray);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    /* SUBMIT BUTTON */
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10, 132, 255, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary-blue);
+      border: 1.5px solid var(--primary-blue);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(10, 132, 255, 0.05);
+    }
+
+    /* SUCCESS MESSAGE */
+    .success-message {
+      background: var(--green-dim);
+      border: 1.5px solid var(--green);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      color: var(--green);
+      font-weight: 500;
+      display: none;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    /* ERROR MESSAGE */
+    .error-message {
+      background: var(--red-dim);
+      border: 1.5px solid var(--red);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      color: var(--red);
+      font-weight: 500;
+      display: none;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    /* LOADING STATE */
+    .loading {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--white);
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .sentiment-indicator {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85em;
+      font-weight: 600;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .sentiment-indicator.positive {
+      background: var(--green-dim);
+      color: var(--green);
+      display: block;
+    }
+
+    .sentiment-indicator.neutral {
+      background: var(--amber-dim);
+      color: var(--amber);
+      display: block;
+    }
+
+    .sentiment-indicator.negative {
+      background: var(--red-dim);
+      color: var(--red);
+      display: block;
+    }
+
+    .field-hint {
+      font-size: 0.8em;
+      color: var(--dark-gray);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    .character-count {
+      font-size: 0.8em;
+      color: var(--dark-gray);
+      margin-top: 4px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Partagez Votre Expérience</h1>
+      <p>Vos commentaires nous aident à vous servir au mieux 🙏</p>
+    </div>
+
+    <div class="form-card">
+      <div id="successMessage" class="success-message">
+        ✓ Merci ! Votre avis a été soumis avec succès.
+      </div>
+      <div id="errorMessage" class="error-message"></div>
+
+      <form id="reviewForm">
+        <!-- Customer Details -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="clientName">Votre Nom <span class="required">*</span></label>
+            <input type="text" id="clientName" name="clientName" placeholder="Jean Dupont" required />
+            <div class="field-hint">Nous l'afficherons comme "J.D." publiquement</div>
+          </div>
+          <div class="form-group">
+            <label for="email">Adresse E-mail <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="jean@example.com" required />
+            <div class="field-hint">Pour vérification uniquement (jamais partagé)</div>
+          </div>
+        </div>
+
+        <!-- Order Details -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="orderId">Numéro de Commande <span class="required">*</span></label>
+            <input type="text" id="orderId" name="orderId" placeholder="CMD-12345" required />
+            <div class="field-hint">De votre email de confirmation de commande</div>
+          </div>
+          <div class="form-group">
+            <label for="product">Produit Acheté <span class="required">*</span></label>
+            <select id="product" name="product" required>
+              <option value="">Sélectionner le Produit</option>
+              <option value="Système CRM">Système CRM</option>
+              <option value="Consultation">Consultation</option>
+              <option value="Formation">Formation</option>
+              <option value="Forfait de Support">Forfait de Support</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Star Rating -->
+        <div class="form-group full-width">
+          <label>Votre Note <span class="required">*</span></label>
+          <div class="star-rating" id="starRating">
+            <div class="star" data-rating="1">⭐</div>
+            <div class="star" data-rating="2">⭐</div>
+            <div class="star" data-rating="3">⭐</div>
+            <div class="star" data-rating="4">⭐</div>
+            <div class="star" data-rating="5">⭐</div>
+          </div>
+          <div id="ratingText" style="font-size: 0.9em; color: var(--dark-gray); font-weight: 500;"></div>
+          <input type="hidden" id="rating" name="rating" value="0" required />
+        </div>
+
+        <!-- NPS Score -->
+        <div class="form-group full-width">
+          <label>How likely are you to recommend SAJX? <span class="required">*</span></label>
+          <div class="nps-scale" id="npsScale"></div>
+          <div class="nps-labels">
+            <span>Not at all likely</span>
+            <span>Extremely likely</span>
+          </div>
+          <input type="hidden" id="npsScore" name="npsScore" value="0" required />
+        </div>
+
+        <!-- Review Text -->
+        <div class="form-group full-width">
+          <label for="review">Your Review <span class="required">*</span></label>
+          <textarea 
+            id="review" 
+            name="review" 
+            placeholder="Share your experience. What did you like? What could be improved?" 
+            required 
+            maxlength="1000"
+          ></textarea>
+          <div class="character-count"><span id="charCount">0</span>/1000</div>
+          <div class="sentiment-indicator" id="sentimentIndicator"></div>
+        </div>
+
+        <!-- Image Upload (Optional) -->
+        <div class="form-group full-width">
+          <label for="reviewImage">Add Photo (Optional)</label>
+          <input type="file" id="reviewImage" name="reviewImage" accept="image/*" />
+          <div class="field-hint">Helps other customers make decisions</div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+          <button type="reset" class="btn-secondary">Clear Form</button>
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <span id="submitText">Submit Review</span>
+            <span class="loading" id="loadingSpinner" style="display: none;"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbzmmVtscGaAOAAt4z21yIKO9Fo5lS2XEuVbaZ-xJv-qtUGqCO_-z-0XslrK6gsrAWHm/exec"; // Replace with your Apps Script deployment URL
+
+    // Get URL parameters for pre-filled data
+    function getUrlParameter(name) {
+      const url = new URL(window.location);
+      return url.searchParams.get(name);
+    }
+
+    // Initialize form with URL parameters
+    document.addEventListener('DOMContentLoaded', () => {
+      const orderId = getUrlParameter('order');
+      const customerName = getUrlParameter('name');
+      
+      if (orderId) document.getElementById('orderId').value = orderId;
+      if (customerName) document.getElementById('clientName').value = decodeURIComponent(customerName);
+
+      initializeStarRating();
+      initializeNPSScale();
+      setupEventListeners();
+    });
+
+    // Initialize Star Rating
+    function initializeStarRating() {
+      const stars = document.querySelectorAll('.star');
+      const ratingInput = document.getElementById('rating');
+      const ratingText = document.getElementById('ratingText');
+
+      const ratingLabels = {
+        1: 'Not Great',
+        2: 'Could Be Better',
+        3: 'Good',
+        4: 'Very Good',
+        5: 'Excellent'
+      };
+
+      stars.forEach(star => {
+        star.addEventListener('click', () => {
+          const rating = star.dataset.rating;
+          ratingInput.value = rating;
+
+          // Update active stars
+          stars.forEach(s => {
+            s.classList.remove('active');
+            if (s.dataset.rating <= rating) {
+              s.classList.add('active');
+            }
+          });
+
+          // Update text
+          ratingText.textContent = `${rating}/5 - ${ratingLabels[rating]}`;
+        });
+
+        star.addEventListener('mouseover', () => {
+          stars.forEach(s => {
+            s.style.opacity = s.dataset.rating <= star.dataset.rating ? '1' : '0.3';
+          });
+        });
+      });
+
+      document.getElementById('starRating').addEventListener('mouseout', () => {
+        stars.forEach(s => {
+          s.style.opacity = s.classList.contains('active') ? '1' : '1';
+        });
+      });
+    }
+
+    // Initialize NPS Scale
+    function initializeNPSScale() {
+      const npsScale = document.getElementById('npsScale');
+      const npsInput = document.getElementById('npsScore');
+
+      for (let i = 0; i <= 10; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'nps-btn';
+        btn.textContent = i;
+        btn.dataset.score = i;
+
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          npsInput.value = i;
+
+          document.querySelectorAll('.nps-btn').forEach(b => {
+            b.classList.remove('active');
+          });
+          btn.classList.add('active');
+        });
+
+        npsScale.appendChild(btn);
+      }
+    }
+
+    // Setup Event Listeners
+    function setupEventListeners() {
+      const reviewInput = document.getElementById('review');
+      const charCount = document.getElementById('charCount');
+      const sentimentIndicator = document.getElementById('sentimentIndicator');
+
+      reviewInput.addEventListener('input', () => {
+        charCount.textContent = reviewInput.value.length;
+        analyzeSimpleSentiment(reviewInput.value, sentimentIndicator);
+      });
+
+      document.getElementById('reviewForm').addEventListener('submit', handleFormSubmit);
+    }
+
+    // Simple Sentiment Analysis (Frontend preview)
+    function analyzeSimpleSentiment(text, indicator) {
+      const lowerText = text.toLowerCase();
+
+      const positiveWords = ['amazing', 'excellent', 'great', 'awesome', 'fast', 'quick', 'satisfied', 'happy', 'love', 'perfect', 'good', 'wonderful', 'impressed', 'professional'];
+      const negativeWords = ['broken', 'disappointing', 'terrible', 'awful', 'bad', 'poor', 'late', 'slow', 'no response', 'unresponsive', 'rude'];
+
+      let positiveCount = 0;
+      let negativeCount = 0;
+
+      positiveWords.forEach(word => {
+        if (lowerText.includes(word)) positiveCount++;
+      });
+
+      negativeWords.forEach(word => {
+        if (lowerText.includes(word)) negativeCount++;
+      });
+
+      indicator.classList.remove('positive', 'neutral', 'negative');
+
+      if (positiveCount > negativeCount && positiveCount > 0) {
+        indicator.classList.add('positive');
+        indicator.textContent = '✓ Positive sentiment detected';
+      } else if (negativeCount > positiveCount && negativeCount > 0) {
+        indicator.classList.add('negative');
+        indicator.textContent = '⚠ Negative sentiment detected';
+      } else if (positiveCount > 0 || negativeCount > 0) {
+        indicator.classList.add('neutral');
+        indicator.textContent = '→ Neutral sentiment detected';
+      }
+    }
+
+    // Handle Form Submit
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const submitText = document.getElementById('submitText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const errorMessage = document.getElementById('errorMessage');
+      const successMessage = document.getElementById('successMessage');
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitText.style.display = 'none';
+      loadingSpinner.style.display = 'inline-block';
+
+      try {
+        const formData = {
+          action: 'submitReview',
+          clientName: document.getElementById('clientName').value,
+          email: document.getElementById('email').value,
+          product: document.getElementById('product').value,
+          rating: document.getElementById('rating').value,
+          review: document.getElementById('review').value,
+          npsScore: document.getElementById('npsScore').value,
+          orderId: document.getElementById('orderId').value,
+          imageUrl: '' // Can be extended for file uploads
+        };
+
+        const response = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          body: new URLSearchParams(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          successMessage.classList.add('show');
+          errorMessage.classList.remove('show');
+          document.getElementById('reviewForm').reset();
+
+          setTimeout(() => {
+            successMessage.classList.remove('show');
+          }, 5000);
+        } else {
+          errorMessage.textContent = `❌ ${result.error}`;
+          errorMessage.classList.add('show');
+        }
+      } catch (error) {
+        errorMessage.textContent = `❌ Error submitting review: ${error.message}`;
+        errorMessage.classList.add('show');
+      } finally {
+        submitBtn.disabled = false;
+        submitText.style.display = 'inline';
+        loadingSpinner.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
