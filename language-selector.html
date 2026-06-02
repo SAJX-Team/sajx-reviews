@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJX Review System - Language Selection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 600px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      background: linear-gradient(135deg, #0A84FF, #0057D9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #444444;
+      margin-bottom: 60px;
+      line-height: 1.6;
+    }
+
+    .language-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .lang-btn {
+      padding: 40px 20px;
+      border: 2px solid #D9D9D9;
+      background: white;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .lang-btn:hover {
+      transform: translateY(-4px);
+      border-color: #0A84FF;
+      box-shadow: 0 10px 30px rgba(10, 132, 255, 0.2);
+    }
+
+    .lang-flag {
+      font-size: 60px;
+    }
+
+    .lang-name {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #050505;
+    }
+
+    .lang-name-local {
+      font-size: 1.1em;
+      color: #0A84FF;
+      font-weight: 600;
+    }
+
+    .divider {
+      color: #D9D9D9;
+      margin: 40px 0;
+      font-size: 1.5em;
+    }
+
+    .other-options {
+      background: rgba(10, 132, 255, 0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    .other-options h3 {
+      color: #0A84FF;
+      margin-bottom: 15px;
+      font-size: 0.95em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .other-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .other-links a {
+      padding: 10px 16px;
+      background: white;
+      border: 1px solid #0A84FF;
+      border-radius: 8px;
+      color: #0A84FF;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+    }
+
+    .other-links a:hover {
+      background: #0A84FF;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .language-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .lang-btn {
+        padding: 30px 15px;
+      }
+
+      .lang-flag {
+        font-size: 45px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⭐ SAJX Review System</h1>
+    <p>Welcome! Please select your language / Bienvenue ! Veuillez sélectionner votre langue</p>
+
+    <div class="language-buttons">
+      <a href="sajx-review-form.html" class="lang-btn">
+        <div class="lang-flag">🇬🇧</div>
+        <div class="lang-name">English</div>
+        <div class="lang-name-local">Share Your Review</div>
+      </a>
+
+      <a href="sajx-review-form-fr.html" class="lang-btn">
+        <div class="lang-flag">🇫🇷</div>
+        <div class="lang-name">Français</div>
+        <div class="lang-name-local">Partagez Votre Avis</div>
+      </a>
+    </div>
+
+    <div class="divider">━━━━</div>
+
+    <div class="other-options">
+      <h3>📊 Other Options</h3>
+      <div class="other-links">
+        <a href="sajx-public-testimonials.html">👁️ View Testimonials (EN)</a>
+        <a href="sajx-admin-dashboard.html">🔐 Admin Dashboard (EN)</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
