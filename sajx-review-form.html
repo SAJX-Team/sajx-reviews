@@ -115,8 +115,22 @@
       color: var(--red);
     }
 
+    .optional-badge {
+      font-size: 0.75em;
+      font-weight: 500;
+      color: var(--dark-gray);
+      background: #f0f0f0;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: none;
+      letter-spacing: 0;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
     input[type="text"],
     input[type="email"],
+    input[type="tel"],
     input[type="number"],
     textarea,
     select {
@@ -133,6 +147,7 @@
 
     input[type="text"]:focus,
     input[type="email"]:focus,
+    input[type="tel"]:focus,
     input[type="number"]:focus,
     textarea:focus,
     select:focus {
@@ -146,6 +161,54 @@
       resize: vertical;
       min-height: 100px;
       font-family: 'DM Sans', sans-serif;
+    }
+
+    /* WHATSAPP INPUT WRAPPER */
+    .whatsapp-input-wrapper {
+      display: flex;
+      align-items: stretch;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      background: #fafafa;
+      transition: var(--transition);
+      overflow: hidden;
+    }
+
+    .whatsapp-input-wrapper:focus-within {
+      border-color: #25D366;
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.12);
+    }
+
+    .whatsapp-prefix {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 12px 12px 14px;
+      background: #f0fdf4;
+      border-right: 1px solid var(--light-gray);
+      white-space: nowrap;
+      font-size: 0.9em;
+      font-weight: 600;
+      color: #1a7a45;
+    }
+
+    .whatsapp-prefix svg {
+      flex-shrink: 0;
+    }
+
+    .whatsapp-input-wrapper input[type="tel"] {
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      flex: 1;
+    }
+
+    .whatsapp-input-wrapper input[type="tel"]:focus {
+      border: none;
+      box-shadow: none;
+      outline: none;
     }
 
     /* STAR RATING */
@@ -323,37 +386,19 @@
     }
 
     @keyframes pulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-      }
-      70% {
-        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-      }
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
     }
 
     @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .sentiment-indicator {
@@ -412,7 +457,7 @@
       <div id="errorMessage" class="error-message"></div>
 
       <form id="reviewForm">
-        <!-- Customer Details -->
+        <!-- Customer Details: Name + WhatsApp -->
         <div class="form-row">
           <div class="form-group">
             <label for="clientName">Votre Nom <span class="required">*</span></label>
@@ -420,30 +465,50 @@
             <div class="field-hint">Nous l'afficherons comme "J.D." publiquement</div>
           </div>
           <div class="form-group">
-            <label for="email">Adresse E-mail <span class="required">*</span></label>
-            <input type="email" id="email" name="email" placeholder="jean@example.com" required />
-            <div class="field-hint">Pour vérification uniquement (jamais partagé)</div>
+            <label for="whatsapp">
+              WhatsApp <span class="required">*</span>
+            </label>
+            <div class="whatsapp-input-wrapper">
+              <span class="whatsapp-prefix">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#25D366">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.12 1.531 5.856L.057 23.882a.5.5 0 0 0 .61.61l6.117-1.461A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.032-1.384l-.36-.214-3.733.892.921-3.636-.235-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/>
+                </svg>
+                +509
+              </span>
+              <input type="tel" id="whatsapp" name="whatsapp" placeholder="3X XX XX XX" required />
+            </div>
+            <div class="field-hint">Numéro WhatsApp Haiti (+509)</div>
           </div>
         </div>
 
-        <!-- Order Details -->
+        <!-- Email (Optional) + Order ID -->
         <div class="form-row">
+          <div class="form-group">
+            <label for="email">
+              Adresse E-mail <span class="optional-badge">Optionnel</span>
+            </label>
+            <input type="email" id="email" name="email" placeholder="jean@example.com" />
+            <div class="field-hint">Pour vérification uniquement (jamais partagé)</div>
+          </div>
           <div class="form-group">
             <label for="orderId">Numéro de Commande <span class="required">*</span></label>
             <input type="text" id="orderId" name="orderId" placeholder="CMD-12345" required />
             <div class="field-hint">De votre email de confirmation de commande</div>
           </div>
-          <div class="form-group">
-            <label for="product">Produit Acheté <span class="required">*</span></label>
-            <select id="product" name="product" required>
-              <option value="">Sélectionner le Produit</option>
-              <option value="Système CRM">Système CRM</option>
-              <option value="Consultation">Consultation</option>
-              <option value="Formation">Formation</option>
-              <option value="Forfait de Support">Forfait de Support</option>
-              <option value="Autre">Autre</option>
-            </select>
-          </div>
+        </div>
+
+        <!-- Product -->
+        <div class="form-group full-width">
+          <label for="product">Produit Acheté <span class="required">*</span></label>
+          <select id="product" name="product" required>
+            <option value="">Sélectionner le Produit</option>
+            <option value="Système CRM">Système CRM</option>
+            <option value="Consultation">Consultation</option>
+            <option value="Formation">Formation</option>
+            <option value="Forfait de Support">Forfait de Support</option>
+            <option value="Autre">Autre</option>
+          </select>
         </div>
 
         <!-- Star Rating -->
@@ -487,7 +552,7 @@
 
         <!-- Image Upload (Optional) -->
         <div class="form-group full-width">
-          <label for="reviewImage">Add Photo (Optional)</label>
+          <label for="reviewImage">Add Photo <span class="optional-badge">Optionnel</span></label>
           <input type="file" id="reviewImage" name="reviewImage" accept="image/*" />
           <div class="field-hint">Helps other customers make decisions</div>
         </div>
@@ -505,16 +570,13 @@
   </div>
 
   <script>
-    // Configuration
-    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbzmmVtscGaAOAAt4z21yIKO9Fo5lS2XEuVbaZ-xJv-qtUGqCO_-z-0XslrK6gsrAWHm/exec"; // Replace with your Apps Script deployment URL
+    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbzmmVtscGaAOAAt4z21yIKO9Fo5lS2XEuVbaZ-xJv-qtUGqCO_-z-0XslrK6gsrAWHm/exec";
 
-    // Get URL parameters for pre-filled data
     function getUrlParameter(name) {
       const url = new URL(window.location);
       return url.searchParams.get(name);
     }
 
-    // Initialize form with URL parameters
     document.addEventListener('DOMContentLoaded', () => {
       const orderId = getUrlParameter('order');
       const customerName = getUrlParameter('name');
@@ -527,7 +589,6 @@
       setupEventListeners();
     });
 
-    // Initialize Star Rating
     function initializeStarRating() {
       const stars = document.querySelectorAll('.star');
       const ratingInput = document.getElementById('rating');
@@ -546,7 +607,6 @@
           const rating = star.dataset.rating;
           ratingInput.value = rating;
 
-          // Update active stars
           stars.forEach(s => {
             s.classList.remove('active');
             if (s.dataset.rating <= rating) {
@@ -554,7 +614,6 @@
             }
           });
 
-          // Update text
           ratingText.textContent = `${rating}/5 - ${ratingLabels[rating]}`;
         });
 
@@ -566,13 +625,10 @@
       });
 
       document.getElementById('starRating').addEventListener('mouseout', () => {
-        stars.forEach(s => {
-          s.style.opacity = s.classList.contains('active') ? '1' : '1';
-        });
+        stars.forEach(s => { s.style.opacity = '1'; });
       });
     }
 
-    // Initialize NPS Scale
     function initializeNPSScale() {
       const npsScale = document.getElementById('npsScale');
       const npsInput = document.getElementById('npsScore');
@@ -588,9 +644,7 @@
           e.preventDefault();
           npsInput.value = i;
 
-          document.querySelectorAll('.nps-btn').forEach(b => {
-            b.classList.remove('active');
-          });
+          document.querySelectorAll('.nps-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
         });
 
@@ -598,7 +652,6 @@
       }
     }
 
-    // Setup Event Listeners
     function setupEventListeners() {
       const reviewInput = document.getElementById('review');
       const charCount = document.getElementById('charCount');
@@ -612,23 +665,16 @@
       document.getElementById('reviewForm').addEventListener('submit', handleFormSubmit);
     }
 
-    // Simple Sentiment Analysis (Frontend preview)
     function analyzeSimpleSentiment(text, indicator) {
       const lowerText = text.toLowerCase();
-
       const positiveWords = ['amazing', 'excellent', 'great', 'awesome', 'fast', 'quick', 'satisfied', 'happy', 'love', 'perfect', 'good', 'wonderful', 'impressed', 'professional'];
       const negativeWords = ['broken', 'disappointing', 'terrible', 'awful', 'bad', 'poor', 'late', 'slow', 'no response', 'unresponsive', 'rude'];
 
       let positiveCount = 0;
       let negativeCount = 0;
 
-      positiveWords.forEach(word => {
-        if (lowerText.includes(word)) positiveCount++;
-      });
-
-      negativeWords.forEach(word => {
-        if (lowerText.includes(word)) negativeCount++;
-      });
+      positiveWords.forEach(word => { if (lowerText.includes(word)) positiveCount++; });
+      negativeWords.forEach(word => { if (lowerText.includes(word)) negativeCount++; });
 
       indicator.classList.remove('positive', 'neutral', 'negative');
 
@@ -644,7 +690,6 @@
       }
     }
 
-    // Handle Form Submit
     async function handleFormSubmit(e) {
       e.preventDefault();
 
@@ -654,7 +699,6 @@
       const errorMessage = document.getElementById('errorMessage');
       const successMessage = document.getElementById('successMessage');
 
-      // Show loading state
       submitBtn.disabled = true;
       submitText.style.display = 'none';
       loadingSpinner.style.display = 'inline-block';
@@ -663,13 +707,14 @@
         const formData = {
           action: 'submitReview',
           clientName: document.getElementById('clientName').value,
+          whatsapp: '+509' + document.getElementById('whatsapp').value.replace(/\s/g, ''),
           email: document.getElementById('email').value,
           product: document.getElementById('product').value,
           rating: document.getElementById('rating').value,
           review: document.getElementById('review').value,
           npsScore: document.getElementById('npsScore').value,
           orderId: document.getElementById('orderId').value,
-          imageUrl: '' // Can be extended for file uploads
+          imageUrl: ''
         };
 
         const response = await fetch(API_ENDPOINT, {
