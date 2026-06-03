@@ -1,313 +1,361 @@
+cat > /mnt/user-data/outputs/sajx-admin-dashboard.html << 'HTMLEOF'
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Review Management Dashboard - SAJX CRM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <style>
     :root {
-      --primary-blue: #0A84FF;
-      --secondary-blue: #0057D9;
-      --premium-black: #050505;
+      --blue: #0A84FF;
+      --blue-deep: #0057D9;
+      --ink: #080C14;
+      --ink-soft: #3B4559;
+      --surface: #F2F5FA;
       --white: #FFFFFF;
-      --light-gray: #D9D9D9;
-      --dark-gray: #444444;
-      --green: #1d9e75;
-      --green-dim: rgba(29, 158, 117, 0.1);
-      --amber: #e4a020;
-      --amber-dim: rgba(228, 160, 32, 0.1);
-      --red: #ff3b30;
-      --red-dim: rgba(255, 59, 48, 0.1);
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --border: #E1E6F0;
+      --green: #12B76A;
+      --green-dim: rgba(18,183,106,0.10);
+      --amber: #F79009;
+      --amber-dim: rgba(247,144,9,0.10);
+      --red: #F04438;
+      --red-dim: rgba(240,68,56,0.10);
+      --shadow-sm: 0 1px 4px rgba(8,12,20,0.06), 0 2px 8px rgba(8,12,20,0.04);
+      --shadow-md: 0 4px 16px rgba(8,12,20,0.08), 0 2px 6px rgba(8,12,20,0.04);
+      --shadow-lg: 0 12px 40px rgba(8,12,20,0.12);
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'DM Sans', sans-serif;
-      background: #f5f7ff;
-      color: var(--premium-black);
+      background: var(--surface);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── LAYOUT ── */
+    .app {
+      display: grid;
+      grid-template-columns: 220px 1fr;
       min-height: 100vh;
     }
 
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--ink);
+      padding: 28px 0;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
     }
 
-    .header {
+    .sidebar-logo {
+      padding: 0 24px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 16px;
+    }
+
+    .sidebar-logo .wordmark {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.5em;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    .sidebar-logo .sub {
+      font-size: 0.72em;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 24px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.88em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      border-left: 3px solid transparent;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      color: var(--white);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav-item.active {
+      color: var(--white);
+      border-left-color: var(--blue);
+      background: rgba(10,132,255,0.12);
+    }
+
+    .nav-item .icon { font-size: 1.1em; width: 20px; text-align: center; }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--red);
+      color: var(--white);
+      font-size: 0.7em;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .nav-badge.blue { background: var(--blue); }
+
+    /* ── MAIN ── */
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
-    .header h1 {
-      font-size: 2em;
+    .topbar-title {
+      font-family: 'Syne', sans-serif;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: 1.2em;
+      color: var(--ink);
     }
 
-    .header-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
 
-    button {
-      padding: 10px 16px;
+    .btn {
+      padding: 9px 16px;
       border: none;
       border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
       font-weight: 600;
+      font-size: 0.85em;
       cursor: pointer;
-      transition: var(--transition);
-      font-size: 0.9em;
+      transition: all 0.2s var(--ease);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       color: var(--white);
     }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(10,132,255,0.35); }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(10, 132, 255, 0.3);
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--ink-soft);
+      border: 1px solid var(--border);
     }
+    .btn-ghost:hover { background: var(--border); }
 
-    .btn-secondary {
-      background: var(--white);
-      color: var(--primary-blue);
-      border: 1.5px solid var(--primary-blue);
-    }
+    .btn-success { background: var(--green); color: var(--white); }
+    .btn-success:hover { opacity: 0.9; }
 
-    .btn-secondary:hover {
-      background: rgba(10, 132, 255, 0.05);
-    }
+    .btn-danger { background: var(--red); color: var(--white); }
+    .btn-danger:hover { opacity: 0.9; }
 
-    .btn-success {
-      background: var(--green);
-      color: var(--white);
-    }
-
-    .btn-danger {
-      background: var(--red);
-      color: var(--white);
-    }
-
-    /* TABS */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-      border-bottom: 2px solid var(--light-gray);
-      flex-wrap: wrap;
-    }
-
-    .tab-btn {
-      padding: 12px 16px;
+    .btn-outline-blue {
       background: transparent;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--dark-gray);
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      font-size: 0.95em;
+      color: var(--blue);
+      border: 1.5px solid var(--blue);
+    }
+    .btn-outline-blue:hover { background: rgba(10,132,255,0.06); }
+
+    /* ── PAGE CONTENT ── */
+    .content {
+      padding: 28px 32px;
+      flex: 1;
     }
 
-    .tab-btn.active {
-      color: var(--primary-blue);
-      border-bottom-color: var(--primary-blue);
+    /* ── TAB CONTENT ── */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeUp 0.25s var(--ease) both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    /* ANALYTICS GRID */
-    .analytics-grid {
+    /* ── METRIC CARDS ── */
+    .metrics-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      margin-bottom: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
     .metric-card {
       background: var(--white);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      transition: all 0.2s var(--ease);
     }
-
-    .metric-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
+    .metric-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
     .metric-label {
-      font-size: 0.85em;
-      color: var(--dark-gray);
+      font-size: 0.75em;
       font-weight: 600;
+      color: var(--ink-soft);
       text-transform: uppercase;
+      letter-spacing: 0.8px;
       margin-bottom: 8px;
-      letter-spacing: 0.5px;
     }
 
     .metric-value {
-      font-size: 2em;
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2em;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 8px;
+      color: var(--blue);
+      line-height: 1;
+      margin-bottom: 4px;
     }
 
-    .metric-subtext {
-      font-size: 0.8em;
-      color: var(--dark-gray);
-    }
+    .metric-hint { font-size: 0.78em; color: var(--ink-soft); }
 
-    /* CHARTS */
+    /* ── CHARTS ── */
     .charts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 20px;
-      margin-bottom: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
     .chart-card {
       background: var(--white);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
     }
 
     .chart-title {
-      font-size: 0.95em;
       font-weight: 600;
+      font-size: 0.9em;
+      color: var(--ink);
       margin-bottom: 16px;
-      color: var(--premium-black);
     }
 
-    .chart-container {
-      position: relative;
-      height: 300px;
-    }
+    .chart-container { position: relative; height: 260px; }
 
-    /* REVIEWS LIST */
-    .reviews-list {
-      background: var(--white);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .review-item {
-      padding: 20px;
-      border-bottom: 1px solid var(--light-gray);
-      transition: var(--transition);
-    }
-
-    .review-item:last-child {
-      border-bottom: none;
-    }
-
-    .review-item:hover {
-      background: #fafafa;
-    }
-
-    .review-header {
+    /* ── REVIEW CARDS ── */
+    .section-head {
       display: flex;
       justify-content: space-between;
-      align-items: start;
-      margin-bottom: 12px;
-      gap: 12px;
-      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 16px;
     }
 
-    .review-customer {
-      font-weight: 600;
-      color: var(--premium-black);
+    .section-head h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1em;
+      color: var(--ink);
     }
 
-    .review-meta {
+    .reviews-stack { display: flex; flex-direction: column; gap: 12px; }
+
+    .review-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s var(--ease);
+    }
+    .review-card:hover { box-shadow: var(--shadow-md); }
+
+    .review-card-top {
       display: flex;
-      gap: 16px;
-      font-size: 0.85em;
-      color: var(--dark-gray);
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+      color: var(--white);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .review-card-meta { flex: 1; min-width: 0; }
+
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95em;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .review-details-row {
+      display: flex;
       flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
 
-    .rating-stars {
-      color: #FFB800;
-      font-size: 1.1em;
-      letter-spacing: 2px;
-    }
-
-    .sentiment-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.75em;
+    .pill {
+      font-size: 0.72em;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .sentiment-badge.positive {
-      background: var(--green-dim);
-      color: var(--green);
-    }
-
-    .sentiment-badge.neutral {
-      background: var(--amber-dim);
-      color: var(--amber);
-    }
-
-    .sentiment-badge.negative {
-      background: var(--red-dim);
-      color: var(--red);
-    }
-
-    .fraud-badge {
-      background: var(--red-dim);
-      color: var(--red);
-      display: inline-block;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 6px;
-      font-size: 0.75em;
-      font-weight: 600;
-      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
+
+    .pill-blue { background: rgba(10,132,255,0.08); color: var(--blue); }
+    .pill-green { background: var(--green-dim); color: var(--green); }
+    .pill-amber { background: var(--amber-dim); color: var(--amber); }
+    .pill-red { background: var(--red-dim); color: var(--red); }
+    .pill-gray { background: var(--surface); color: var(--ink-soft); border: 1px solid var(--border); }
+
+    .stars { color: #F6A723; font-size: 0.85em; letter-spacing: 1px; }
 
     .review-text {
-      color: var(--premium-black);
-      line-height: 1.6;
-      margin-bottom: 12px;
-      font-size: 0.95em;
+      font-size: 0.9em;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      font-style: italic;
+      border-left: 3px solid var(--blue);
+      padding-left: 12px;
+      margin-bottom: 14px;
     }
 
     .review-actions {
@@ -316,589 +364,908 @@
       flex-wrap: wrap;
     }
 
-    .review-actions button {
-      padding: 8px 12px;
-      font-size: 0.85em;
+    .review-actions .btn {
+      padding: 7px 12px;
+      font-size: 0.8em;
     }
 
-    /* MODAL */
-    .modal {
+    /* ── FRAUD CARD ACCENT ── */
+    .review-card.fraud-card { border-color: var(--red); border-left: 4px solid var(--red); }
+
+    /* ── EMPTY / LOADING ── */
+    .state-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--ink-soft);
+    }
+
+    .state-box h3 { font-size: 1em; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    .state-box p  { font-size: 0.88em; }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--ink);
+      color: var(--white);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.88em;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.25s var(--ease);
+      pointer-events: none;
+    }
+
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.success { background: var(--green); }
+    #toast.error   { background: var(--red); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
       display: none;
       position: fixed;
+      inset: 0;
+      background: rgba(8,12,20,0.55);
       z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      animation: fadeIn 0.3s ease-out;
-    }
-
-    .modal.show {
-      display: flex;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(2px);
     }
 
-    .modal-content {
+    .modal-overlay.show { display: flex; animation: fadeIn 0.2s var(--ease); }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-box {
       background: var(--white);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 28px;
-      max-width: 600px;
       width: 90%;
+      max-width: 520px;
       box-shadow: var(--shadow-lg);
-      animation: slideUp 0.3s ease-out;
-    }
-
-    .modal-header {
-      font-size: 1.3em;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: var(--premium-black);
-    }
-
-    .modal-body {
-      margin-bottom: 20px;
-      color: var(--dark-gray);
-      line-height: 1.6;
-    }
-
-    .modal-body textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--light-gray);
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95em;
-      min-height: 100px;
-      margin-bottom: 12px;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-
-    .modal-actions button {
-      padding: 10px 16px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      animation: slideUp 0.25s var(--ease);
     }
 
     @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* RESPONSIVE */
+    .modal-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.15em;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .modal-label {
+      font-size: 0.82em;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+
+    .modal-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9em;
+      min-height: 110px;
+      resize: vertical;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .modal-textarea:focus { border-color: var(--blue); }
+
+    .modal-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* ── SHARE CARD MODAL ── */
+    #shareModal .modal-box { max-width: 600px; }
+
+    #shareCanvas {
+      display: block;
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .charts-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .modal-content {
-        max-width: 95%;
-      }
-
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .tabs {
-        overflow-x: auto;
-      }
-    }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--dark-gray);
-    }
-
-    .spinner {
-      border: 4px solid var(--light-gray);
-      border-top: 4px solid var(--primary-blue);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--dark-gray);
-    }
-
-    .empty-state h3 {
-      margin-bottom: 8px;
-      color: var(--premium-black);
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .content { padding: 20px 16px; }
+      .topbar { padding: 14px 16px; }
+      .charts-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <h1>📊 Review Management Dashboard</h1>
-      <div class="header-actions">
-        <button class="btn-secondary" onclick="refreshData()">🔄 Refresh</button>
-        <button class="btn-primary" onclick="exportReviews()">⬇️ Export</button>
+<div class="app">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="wordmark">SAJX</div>
+      <div class="sub">Review Management</div>
+    </div>
+
+    <div class="nav-item active" onclick="switchTab('analytics', this)">
+      <span class="icon">📈</span> Analytics
+    </div>
+    <div class="nav-item" onclick="switchTab('pending', this)">
+      <span class="icon">⏳</span> En attente
+      <span class="nav-badge" id="pendingBadge">…</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('approved', this)">
+      <span class="icon">✓</span> Approuvés
+    </div>
+    <div class="nav-item" onclick="switchTab('testimonials', this)">
+      <span class="icon">⭐</span> Témoignages
+    </div>
+    <div class="nav-item" onclick="switchTab('fraud', this)">
+      <span class="icon">🚨</span> Fraudes
+      <span class="nav-badge" id="fraudBadge" style="display:none">!</span>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbarTitle">Analytics</div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" onclick="refreshData()">🔄 Actualiser</button>
+        <button class="btn btn-primary" onclick="exportCSV()">⬇️ Exporter CSV</button>
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('analytics')">📈 Analytics</button>
-      <button class="tab-btn" onclick="switchTab('pending')">⏳ Pending Reviews</button>
-      <button class="tab-btn" onclick="switchTab('approved')">✓ Approved Reviews</button>
-      <button class="tab-btn" onclick="switchTab('testimonials')">⭐ Testimonials</button>
-      <button class="tab-btn" onclick="switchTab('fraud')">🚨 Fraud Alerts</button>
-    </div>
+    <div class="content">
 
-    <!-- ANALYTICS TAB -->
-    <div id="analytics" class="tab-content active">
-      <div class="analytics-grid" id="metricsContainer">
-        <div class="metric-card">
-          <div class="metric-label">Total Reviews</div>
-          <div class="metric-value" id="totalReviews">-</div>
-          <div class="metric-subtext">All time</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Avg Rating</div>
-          <div class="metric-value" id="avgRating">-</div>
-          <div class="metric-subtext">/5.0</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">NPS Score</div>
-          <div class="metric-value" id="npsScore">-</div>
-          <div class="metric-subtext">Net Promoter</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Positive %</div>
-          <div class="metric-value" id="positivePct">-</div>
-          <div class="metric-subtext">Sentiment</div>
-        </div>
-      </div>
-
-      <div class="charts-grid">
-        <div class="chart-card">
-          <div class="chart-title">Sentiment Distribution</div>
-          <div class="chart-container">
-            <canvas id="sentimentChart"></canvas>
+      <!-- ── ANALYTICS ── -->
+      <div id="analytics" class="tab-content active">
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-label">Total Avis</div>
+            <div class="metric-value" id="totalReviews">—</div>
+            <div class="metric-hint">Tous les temps</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Note Moyenne</div>
+            <div class="metric-value" id="avgRating">—</div>
+            <div class="metric-hint">Sur 5.0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">NPS Score</div>
+            <div class="metric-value" id="npsScore">—</div>
+            <div class="metric-hint">Net Promoter</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Positifs</div>
+            <div class="metric-value" id="positivePct">—</div>
+            <div class="metric-hint">% sentiment</div>
           </div>
         </div>
-        <div class="chart-card">
-          <div class="chart-title">Rating Distribution</div>
-          <div class="chart-container">
-            <canvas id="ratingChart"></canvas>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-title">Distribution des Sentiments</div>
+            <div class="chart-container"><canvas id="sentimentChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Distribution des Notes</div>
+            <div class="chart-container"><canvas id="ratingChart"></canvas></div>
           </div>
         </div>
-      </div>
 
-      <div class="chart-card">
-        <div class="chart-title">Top Reviewed Products</div>
-        <div class="chart-container">
-          <canvas id="productsChart"></canvas>
+        <div class="chart-card">
+          <div class="chart-title">Produits les Plus Évalués</div>
+          <div class="chart-container"><canvas id="productsChart"></canvas></div>
         </div>
       </div>
-    </div>
 
-    <!-- PENDING REVIEWS TAB -->
-    <div id="pending" class="tab-content">
-      <div class="reviews-list" id="pendingReviewsList">
-        <div class="loading">
-          <div class="spinner"></div>
-          <p>Loading pending reviews...</p>
+      <!-- ── PENDING ── -->
+      <div id="pending" class="tab-content">
+        <div class="section-head">
+          <h2>Avis en Attente</h2>
+        </div>
+        <div class="reviews-stack" id="pendingList">
+          <div class="state-box"><div class="spinner"></div><p>Chargement…</p></div>
         </div>
       </div>
-    </div>
 
-    <!-- APPROVED REVIEWS TAB -->
-    <div id="approved" class="tab-content">
-      <div class="reviews-list" id="approvedReviewsList">
-        <div class="loading">
-          <div class="spinner"></div>
-          <p>Loading approved reviews...</p>
+      <!-- ── APPROVED ── -->
+      <div id="approved" class="tab-content">
+        <div class="section-head">
+          <h2>Avis Approuvés</h2>
+        </div>
+        <div class="reviews-stack" id="approvedList">
+          <div class="state-box"><div class="spinner"></div><p>Chargement…</p></div>
         </div>
       </div>
-    </div>
 
-    <!-- TESTIMONIALS TAB -->
-    <div id="testimonials" class="tab-content">
-      <div class="reviews-list" id="testimonialsList">
-        <div class="loading">
-          <div class="spinner"></div>
-          <p>Loading testimonials...</p>
+      <!-- ── TESTIMONIALS ── -->
+      <div id="testimonials" class="tab-content">
+        <div class="section-head">
+          <h2>Témoignages Mis en Avant</h2>
+        </div>
+        <div class="reviews-stack" id="testimonialsList">
+          <div class="state-box"><div class="spinner"></div><p>Chargement…</p></div>
         </div>
       </div>
-    </div>
 
-    <!-- FRAUD ALERTS TAB -->
-    <div id="fraud" class="tab-content">
-      <div class="reviews-list" id="fraudAlertsList">
-        <div class="loading">
-          <div class="spinner"></div>
-          <p>Loading fraud alerts...</p>
+      <!-- ── FRAUD ── -->
+      <div id="fraud" class="tab-content">
+        <div class="section-head">
+          <h2>Alertes de Fraude</h2>
+        </div>
+        <div class="reviews-stack" id="fraudList">
+          <div class="state-box"><div class="spinner"></div><p>Chargement…</p></div>
         </div>
       </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ── REPLY MODAL ── -->
+<div id="replyModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title">💬 Répondre à l'Avis</div>
+    <p class="modal-label" id="replyTargetName" style="margin-bottom:14px; font-size:0.9em; color:var(--ink-soft);"></p>
+    <div class="modal-label">Votre réponse</div>
+    <textarea class="modal-textarea" id="replyText" placeholder="Rédigez votre réponse professionnelle ici…"></textarea>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('replyModal')">Annuler</button>
+      <button class="btn btn-primary" onclick="submitReply()">Envoyer la Réponse</button>
     </div>
   </div>
+</div>
 
-  <!-- REPLY MODAL -->
-  <div id="replyModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">Reply to Review</div>
-      <div class="modal-body">
-        <p id="customerInfo"></p>
-        <textarea id="replyText" placeholder="Write your professional response here..."></textarea>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-secondary" onclick="closeReplyModal()">Cancel</button>
-        <button class="btn-primary" onclick="submitReply()">Send Reply</button>
-      </div>
+<!-- ── REJECT MODAL ── -->
+<div id="rejectModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title">✕ Rejeter l'Avis</div>
+    <p style="font-size:0.9em; color:var(--ink-soft); margin-bottom:14px;">Précisez la raison du rejet (optionnel) :</p>
+    <textarea class="modal-textarea" id="rejectReason" placeholder="Ex: Contenu inapproprié, hors sujet…" style="min-height:80px;"></textarea>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('rejectModal')">Annuler</button>
+      <button class="btn btn-danger" onclick="confirmReject()">Confirmer le Rejet</button>
     </div>
   </div>
+</div>
 
-  <script>
-    // Configuration
-    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbzmmVtscGaAOAAt4z21yIKO9Fo5lS2XEuVbaZ-xJv-qtUGqCO_-z-0XslrK6gsrAWHm/exec"; // Replace with your Apps Script deployment URL
-    let currentReviewRow = null;
-    let allReviews = [];
-    let analyticsData = null;
-    let sentimentChart = null;
-    let ratingChart = null;
-    let productsChart = null;
+<!-- ── SHARE IMAGE MODAL ── -->
+<div id="shareModal" class="modal-overlay">
+  <div class="modal-box" id="shareModalBox">
+    <div class="modal-title">📸 Carte Réseaux Sociaux</div>
+    <p style="font-size:0.85em; color:var(--ink-soft); margin-bottom:16px;">Téléchargez cette image pour la partager sur vos réseaux.</p>
+    <canvas id="shareCanvas" width="1080" height="1080"></canvas>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('shareModal')">Fermer</button>
+      <button class="btn btn-primary" onclick="downloadShareCard()">⬇️ Télécharger PNG</button>
+    </div>
+  </div>
+</div>
 
-    // Initialize Dashboard
-    document.addEventListener('DOMContentLoaded', () => {
-      refreshData();
-      setInterval(refreshData, 60000); // Refresh every minute
-    });
+<!-- ── TOAST ── -->
+<div id="toast"></div>
 
-    // Switch Tab
-    function switchTab(tabName) {
-      // Hide all tabs
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
+<script>
+/* ════════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════════ */
+const API = "https://script.google.com/macros/s/AKfycbzmmVtscGaAOAAt4z21yIKO9Fo5lS2XEuVbaZ-xJv-qtUGqCO_-z-0XslrK6gsrAWHm/exec";
 
-      // Deactivate all buttons
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
+let allReviews = [];
+let currentReplyRow = null;
+let currentRejectRow = null;
+let sentimentChart = null, ratingChart = null, productsChart = null;
 
-      // Show selected tab
-      document.getElementById(tabName).classList.add('active');
-      event.target.classList.add('active');
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  refreshData();
+  setInterval(refreshData, 60000);
+});
 
-      // Load data for the tab
-      if (tabName === 'pending') loadPendingReviews();
-      if (tabName === 'approved') loadApprovedReviews();
-      if (tabName === 'testimonials') loadTestimonials();
+/* ════════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════════ */
+const TAB_TITLES = {
+  analytics: 'Analytics',
+  pending: 'Avis en Attente',
+  approved: 'Avis Approuvés',
+  testimonials: 'Témoignages',
+  fraud: 'Alertes Fraude'
+};
+
+function switchTab(name, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('topbarTitle').textContent = TAB_TITLES[name] || name;
+
+  if (name === 'pending')      loadPendingReviews();
+  if (name === 'approved')     loadApprovedReviews();
+  if (name === 'testimonials') loadTestimonials();
+  if (name === 'fraud')        loadFraudAlerts();
+}
+
+/* ════════════════════════════════════════════
+   DATA FETCHING — GET (no-cors not needed for GET)
+════════════════════════════════════════════ */
+async function apiFetch(params) {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${API}?${qs}`);
+  return res.json();
+}
+
+/* POST — Apps Script needs no-cors + URLSearchParams
+   Because of no-cors we get an opaque response, so
+   we can't read the reply, but the action still executes */
+async function apiPost(params) {
+  await fetch(API, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(params).toString()
+  });
+}
+
+/* ════════════════════════════════════════════
+   REFRESH ALL
+════════════════════════════════════════════ */
+async function refreshData() {
+  await Promise.all([loadAnalytics(), loadPendingReviews()]);
+}
+
+/* ════════════════════════════════════════════
+   ANALYTICS
+════════════════════════════════════════════ */
+async function loadAnalytics() {
+  try {
+    const data = await apiFetch({ action: 'getAnalytics' });
+
+    document.getElementById('totalReviews').textContent = data.totalReviews ?? '—';
+    document.getElementById('avgRating').textContent    = data.averageRating ?? '—';
+    document.getElementById('npsScore').textContent     = data.npsScore ?? '—';
+    document.getElementById('positivePct').textContent  = (data.sentimentPercentage?.positive ?? '—') + '%';
+
+    buildSentimentChart(data);
+    buildRatingChart(data);
+    buildProductsChart(data);
+  } catch (e) {
+    console.error('Analytics error', e);
+  }
+}
+
+function buildSentimentChart(d) {
+  const ctx = document.getElementById('sentimentChart').getContext('2d');
+  if (sentimentChart) sentimentChart.destroy();
+  sentimentChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Positif', 'Neutre', 'Négatif'],
+      datasets: [{
+        data: [
+          d.sentimentBreakdown?.positive ?? 0,
+          d.sentimentBreakdown?.neutral  ?? 0,
+          d.sentimentBreakdown?.negative ?? 0
+        ],
+        backgroundColor: ['#12B76A', '#F79009', '#F04438'],
+        borderColor: '#fff', borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { family: 'DM Sans' }, padding: 16 } } },
+      cutout: '62%'
     }
+  });
+}
 
-    // Refresh All Data
-    async function refreshData() {
-      await loadAnalytics();
-      await loadPendingReviews();
+function buildRatingChart(d) {
+  const ctx = document.getElementById('ratingChart').getContext('2d');
+  if (ratingChart) ratingChart.destroy();
+  const counts = [0,0,0,0,0];
+  (d.ratingBreakdown || []).forEach(r => { if (r.rating >= 1 && r.rating <= 5) counts[r.rating - 1] = r.count; });
+  ratingChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['1★','2★','3★','4★','5★'],
+      datasets: [{ label: 'Avis', data: counts, backgroundColor: '#0A84FF', borderRadius: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false } } }
     }
+  });
+}
 
-    // Load Analytics
-    async function loadAnalytics() {
-      try {
-        const response = await fetch(`${API_ENDPOINT}?action=getAnalytics`);
-        analyticsData = await response.json();
-
-        // Update metrics
-        document.getElementById('totalReviews').textContent = analyticsData.totalReviews;
-        document.getElementById('avgRating').textContent = analyticsData.averageRating;
-        document.getElementById('npsScore').textContent = analyticsData.npsScore;
-        document.getElementById('positivePct').textContent = analyticsData.sentimentPercentage.positive + '%';
-
-        // Create charts
-        createSentimentChart();
-        createRatingChart();
-        createProductsChart();
-      } catch (error) {
-        console.error('Error loading analytics:', error);
-      }
+function buildProductsChart(d) {
+  const ctx = document.getElementById('productsChart').getContext('2d');
+  if (productsChart) productsChart.destroy();
+  const products = d.topProducts || [];
+  productsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: products.map(p => p.product),
+      datasets: [{ label: 'Avis', data: products.map(p => p.count), backgroundColor: '#0A84FF', borderRadius: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false } } }
     }
+  });
+}
 
-    // Create Sentiment Chart
-    function createSentimentChart() {
-      const ctx = document.getElementById('sentimentChart').getContext('2d');
-      if (sentimentChart) sentimentChart.destroy();
+/* ════════════════════════════════════════════
+   PENDING REVIEWS
+════════════════════════════════════════════ */
+async function loadPendingReviews() {
+  try {
+    const reviews = await apiFetch({ action: 'getPendingReviews' });
+    allReviews = reviews;
 
-      sentimentChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Positive', 'Neutral', 'Negative'],
-          datasets: [{
-            data: [
-              analyticsData.sentimentBreakdown.positive,
-              analyticsData.sentimentBreakdown.neutral,
-              analyticsData.sentimentBreakdown.negative
-            ],
-            backgroundColor: ['#1d9e75', '#e4a020', '#ff3b30'],
-            borderColor: '#fff',
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { font: { family: "'DM Sans', sans-serif" } } }
-          }
-        }
-      });
-    }
+    const badge = document.getElementById('pendingBadge');
+    badge.textContent = reviews.length;
+    badge.style.display = reviews.length ? '' : 'none';
 
-    // Create Rating Chart
-    function createRatingChart() {
-      const ctx = document.getElementById('ratingChart').getContext('2d');
-      if (ratingChart) ratingChart.destroy();
+    renderReviewList('pendingList', reviews, 'pending');
+  } catch (e) {
+    console.error('Pending error', e);
+    document.getElementById('pendingList').innerHTML = emptyState('Erreur de chargement', 'Vérifiez la connexion à l\'API.');
+  }
+}
 
-      ratingChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['1⭐', '2⭐', '3⭐', '4⭐', '5⭐'],
-          datasets: [{
-            label: 'Reviews',
-            data: [0, 0, 0, 0, 0], // Will be populated from actual data
-            backgroundColor: '#0A84FF',
-            borderRadius: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          indexAxis: 'y',
-          plugins: { legend: { display: false } }
-        }
-      });
-    }
+async function loadApprovedReviews() {
+  try {
+    const reviews = await apiFetch({ action: 'getApprovedReviews' });
+    renderReviewList('approvedList', reviews, 'approved');
+  } catch (e) {
+    document.getElementById('approvedList').innerHTML = emptyState('Erreur', e.message);
+  }
+}
 
-    // Create Products Chart
-    function createProductsChart() {
-      const ctx = document.getElementById('productsChart').getContext('2d');
-      if (productsChart) productsChart.destroy();
+async function loadTestimonials() {
+  try {
+    const reviews = await apiFetch({ action: 'getTestimonials' });
+    renderReviewList('testimonialsList', reviews, 'testimonial');
+  } catch (e) {
+    document.getElementById('testimonialsList').innerHTML = emptyState('Erreur', e.message);
+  }
+}
 
-      productsChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: analyticsData.topProducts.map(p => p.product),
-          datasets: [{
-            label: 'Review Count',
-            data: analyticsData.topProducts.map(p => p.count),
-            backgroundColor: '#0A84FF',
-            borderRadius: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          indexAxis: 'y',
-          plugins: { legend: { display: false } }
-        }
-      });
-    }
+async function loadFraudAlerts() {
+  try {
+    const reviews = await apiFetch({ action: 'getFraudAlerts' });
+    const badge = document.getElementById('fraudBadge');
+    badge.style.display = reviews.length ? '' : 'none';
+    renderReviewList('fraudList', reviews, 'fraud');
+  } catch (e) {
+    document.getElementById('fraudList').innerHTML = emptyState('Erreur', e.message);
+  }
+}
 
-    // Load Pending Reviews
-    async function loadPendingReviews() {
-      try {
-        const response = await fetch(`${API_ENDPOINT}?action=getPendingReviews`);
-        const reviews = await response.json();
-        const container = document.getElementById('pendingReviewsList');
+/* ════════════════════════════════════════════
+   RENDER REVIEW LIST
+════════════════════════════════════════════ */
+function renderReviewList(containerId, reviews, mode) {
+  const container = document.getElementById(containerId);
+  if (!reviews || reviews.length === 0) {
+    container.innerHTML = emptyState(
+      mode === 'pending' ? '✓ Aucun avis en attente' : 'Aucun résultat',
+      mode === 'pending' ? 'Tous les avis ont été traités !' : 'Rien à afficher pour le moment.'
+    );
+    return;
+  }
 
-        if (reviews.length === 0) {
-          container.innerHTML = '<div class="empty-state"><h3>✓ No Pending Reviews</h3><p>All reviews have been reviewed!</p></div>';
-          return;
-        }
+  container.innerHTML = reviews.map(r => buildReviewCard(r, mode)).join('');
+}
 
-        container.innerHTML = reviews.map((review, index) => `
-          <div class="review-item">
-            <div class="review-header">
-              <div>
-                <div class="review-customer">${review.clientName}</div>
-                <div class="review-meta">
-                  <span>Order: ${review.orderId}</span>
-                  <span class="rating-stars">${'⭐'.repeat(review.rating)}</span>
-                  <span class="sentiment-badge ${review.sentiment.toLowerCase()}">${review.sentiment}</span>
-                  ${review.fraudFlag === 'TRUE' ? '<span class="fraud-badge">⚠ FRAUD</span>' : ''}
-                </div>
-              </div>
-            </div>
-            <div class="review-text">"${review.review}"</div>
-            <div class="review-actions">
-              <button class="btn-success" onclick="approveReview(${review.rowIndex})">✓ Approve</button>
-              <button class="btn-danger" onclick="rejectReview(${review.rowIndex})">✕ Reject</button>
-              <button class="btn-primary" onclick="openReplyModal(${review.rowIndex}, '${review.clientName}')">💬 Reply</button>
-              <button class="btn-secondary" onclick="markTestimonial(${review.rowIndex})">⭐ Featured</button>
-            </div>
+function buildReviewCard(r, mode) {
+  const initials = getInitials(r.clientName || r.clientID || '?');
+  const stars = '★'.repeat(Math.min(5, r.rating || 0)) + '☆'.repeat(Math.max(0, 5 - (r.rating || 0)));
+  const sentimentClass = { positive: 'pill-green', neutral: 'pill-amber', negative: 'pill-red' }[(r.sentiment || '').toLowerCase()] || 'pill-gray';
+  const fraudBadge = r.fraudFlag === 'TRUE' ? '<span class="pill pill-red">⚠ FRAUDE</span>' : '';
+
+  const actions = [];
+
+  if (mode === 'pending') {
+    actions.push(`<button class="btn btn-success" onclick="approveReview(${r.rowIndex})">✓ Approuver</button>`);
+    actions.push(`<button class="btn btn-danger" onclick="openRejectModal(${r.rowIndex})">✕ Rejeter</button>`);
+    actions.push(`<button class="btn btn-outline-blue" onclick="openReplyModal(${r.rowIndex}, '${escHtml(r.clientName)}')">💬 Répondre</button>`);
+    actions.push(`<button class="btn btn-ghost" onclick="markTestimonial(${r.rowIndex})">⭐ Mettre en avant</button>`);
+  }
+
+  if (mode === 'approved' || mode === 'testimonial') {
+    actions.push(`<button class="btn btn-ghost" onclick="openReplyModal(${r.rowIndex}, '${escHtml(r.clientName)}')">💬 Répondre</button>`);
+  }
+
+  // Share card button always visible
+  const shareData = encodeURIComponent(JSON.stringify({
+    name: r.clientName || r.clientID || '?',
+    orderId: r.orderId || r.orderID || '—',
+    product: r.product || '—',
+    rating: r.rating || 0,
+    recommendation: r.recommendation || r.nps || '—',
+    review: r.review || '',
+    sentiment: r.sentiment || ''
+  }));
+  actions.push(`<button class="btn btn-ghost" onclick="openShareModal(${r.rowIndex}, '${shareData}')">📸 Partager</button>`);
+
+  return `
+    <div class="review-card ${r.fraudFlag === 'TRUE' ? 'fraud-card' : ''}">
+      <div class="review-card-top">
+        <div class="avatar">${initials}</div>
+        <div class="review-card-meta">
+          <div class="reviewer-name">${escHtml(r.clientName || r.clientID || 'Anonyme')}</div>
+          <div class="review-details-row">
+            <span class="pill pill-blue">🧾 ${escHtml(r.orderId || r.orderID || '—')}</span>
+            <span class="pill pill-gray">📦 ${escHtml(r.product || '—')}</span>
+            <span class="stars">${stars}</span>
+            <span class="pill ${sentimentClass}">${r.sentiment || '—'}</span>
+            ${fraudBadge}
           </div>
-        `).join('');
-      } catch (error) {
-        console.error('Error loading pending reviews:', error);
-      }
+        </div>
+      </div>
+      <div class="review-text">${escHtml(r.review || '')}</div>
+      <div class="review-actions">${actions.join('')}</div>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════
+   ACTIONS — APPROVE / REJECT / REPLY / TESTIMONIAL
+   All POST calls use no-cors so Apps Script can
+   execute without CORS headers on response.
+════════════════════════════════════════════ */
+async function approveReview(rowIndex) {
+  try {
+    await apiPost({ action: 'approveReview', rowIndex });
+    showToast('✓ Avis approuvé', 'success');
+    await loadPendingReviews();
+    await loadAnalytics();
+  } catch (e) { showToast('Erreur: ' + e.message, 'error'); }
+}
+
+function openRejectModal(rowIndex) {
+  currentRejectRow = rowIndex;
+  document.getElementById('rejectReason').value = '';
+  openModal('rejectModal');
+}
+
+async function confirmReject() {
+  const reason = document.getElementById('rejectReason').value.trim();
+  try {
+    await apiPost({ action: 'rejectReview', rowIndex: currentRejectRow, reason });
+    closeModal('rejectModal');
+    showToast('Avis rejeté', 'success');
+    await loadPendingReviews();
+  } catch (e) { showToast('Erreur: ' + e.message, 'error'); }
+}
+
+function openReplyModal(rowIndex, name) {
+  currentReplyRow = rowIndex;
+  document.getElementById('replyTargetName').textContent = 'Répondre à ' + name;
+  document.getElementById('replyText').value = '';
+  openModal('replyModal');
+}
+
+async function submitReply() {
+  const reply = document.getElementById('replyText').value.trim();
+  if (!reply) { showToast('Veuillez écrire une réponse', 'error'); return; }
+  try {
+    await apiPost({ action: 'addAdminReply', rowIndex: currentReplyRow, reply });
+    closeModal('replyModal');
+    showToast('✓ Réponse envoyée', 'success');
+    await loadPendingReviews();
+  } catch (e) { showToast('Erreur: ' + e.message, 'error'); }
+}
+
+async function markTestimonial(rowIndex) {
+  try {
+    await apiPost({ action: 'markAsTestimonial', rowIndex });
+    showToast('⭐ Mis en avant comme témoignage', 'success');
+    await loadPendingReviews();
+  } catch (e) { showToast('Erreur: ' + e.message, 'error'); }
+}
+
+/* ════════════════════════════════════════════
+   SHARE CARD — Canvas-based social media image
+════════════════════════════════════════════ */
+let shareCanvas;
+
+function openShareModal(rowIndex, encodedData) {
+  const data = JSON.parse(decodeURIComponent(encodedData));
+  shareCanvas = document.getElementById('shareCanvas');
+  drawShareCard(shareCanvas, data);
+  openModal('shareModal');
+}
+
+function drawShareCard(canvas, d) {
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1080;
+  canvas.width = W;
+  canvas.height = H;
+
+  // ── Background
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#080C14');
+  bg.addColorStop(1, '#0D1A35');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Decorative circle top-right
+  ctx.save();
+  ctx.globalAlpha = 0.12;
+  const circ = ctx.createRadialGradient(W * 0.85, H * 0.12, 0, W * 0.85, H * 0.12, 320);
+  circ.addColorStop(0, '#0A84FF');
+  circ.addColorStop(1, 'transparent');
+  ctx.fillStyle = circ;
+  ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+
+  // ── Blue accent line
+  const accentGrad = ctx.createLinearGradient(80, 0, 460, 0);
+  accentGrad.addColorStop(0, '#0A84FF');
+  accentGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = accentGrad;
+  ctx.fillRect(80, 130, 380, 4);
+
+  // ── SAJX wordmark
+  ctx.font = 'bold 56px DM Sans, sans-serif';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillText('SAJX', 80, 115);
+
+  ctx.font = '26px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.fillText('AVIS CLIENT', 80 + 4, 168);
+
+  // ── Avatar circle
+  const avatarX = 80, avatarY = 220, avatarR = 52;
+  ctx.save();
+  const avGrad = ctx.createLinearGradient(avatarX - avatarR, avatarY - avatarR, avatarX + avatarR, avatarY + avatarR);
+  avGrad.addColorStop(0, '#0A84FF');
+  avGrad.addColorStop(1, '#0057D9');
+  ctx.fillStyle = avGrad;
+  ctx.beginPath();
+  ctx.arc(avatarX + avatarR, avatarY + avatarR, avatarR, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'bold 44px DM Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(getInitials(d.name), avatarX + avatarR, avatarY + avatarR);
+  ctx.restore();
+
+  // ── Name & order
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.font = 'bold 40px DM Sans, sans-serif';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillText(d.name, avatarX + avatarR * 2 + 24, avatarY + 38);
+
+  ctx.font = '26px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.45)';
+  ctx.fillText('Commande #' + d.orderId, avatarX + avatarR * 2 + 24, avatarY + 82);
+
+  // ── Stars
+  const starY = 366;
+  ctx.font = '54px serif';
+  ctx.fillStyle = '#F6A723';
+  ctx.fillText('★'.repeat(Math.min(5, d.rating || 0)) + '☆'.repeat(Math.max(0, 5 - (d.rating || 0))), 80, starY);
+
+  ctx.font = '24px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.fillText(`${d.rating}/5`, 80 + 54 * 5 + 14, starY - 10);
+
+  // ── Divider
+  ctx.fillStyle = 'rgba(255,255,255,0.08)';
+  ctx.fillRect(80, 398, W - 160, 1);
+
+  // ── Product pill
+  roundRect(ctx, 80, 420, 400, 52, 10);
+  ctx.fillStyle = 'rgba(10,132,255,0.15)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(10,132,255,0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  ctx.font = '26px DM Sans, sans-serif';
+  ctx.fillStyle = '#0A84FF';
+  ctx.textAlign = 'center';
+  ctx.fillText('📦 ' + truncate(d.product, 30), 80 + 200, 451);
+
+  // ── Review text
+  ctx.textAlign = 'left';
+  ctx.font = 'italic 30px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+
+  // Blue quote mark
+  ctx.font = 'bold 80px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(10,132,255,0.6)';
+  ctx.fillText('"', 64, 535);
+
+  ctx.font = 'italic 30px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  const lines = wrapText(ctx, d.review, W - 200, 30);
+  lines.slice(0, 6).forEach((line, i) => {
+    ctx.fillText(line, 80, 560 + i * 46);
+  });
+
+  // ── Recommendation
+  const recY = 830;
+  ctx.textAlign = 'left';
+  ctx.font = '24px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.fillText('RECOMMANDATION', 80, recY);
+
+  const recVal = String(d.recommendation);
+  ctx.font = 'bold 54px DM Sans, sans-serif';
+  ctx.fillStyle = '#12B76A';
+  ctx.fillText(recVal, 80, recY + 60);
+
+  if (!isNaN(parseFloat(recVal))) {
+    ctx.font = '26px DM Sans, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillText('/10', 80 + ctx.measureText(recVal).width + 8, recY + 50);
+  }
+
+  // ── Bottom bar
+  ctx.fillStyle = 'rgba(255,255,255,0.05)';
+  ctx.fillRect(0, H - 90, W, 90);
+
+  ctx.font = '22px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.textAlign = 'left';
+  ctx.fillText('sajx.com', 80, H - 33);
+
+  ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  ctx.fillText(new Date().toLocaleDateString('fr-FR'), W - 80, H - 33);
+
+  // Set CSS display size
+  canvas.style.maxWidth = '100%';
+  canvas.style.height = 'auto';
+}
+
+// Helpers
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function wrapText(ctx, text, maxWidth, fontSize) {
+  const words = (text || '').split(' ');
+  const lines = [];
+  let line = '';
+  ctx.font = `italic ${fontSize}px DM Sans, sans-serif`;
+  for (const word of words) {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
     }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
 
-    // Load Approved Reviews
-    async function loadApprovedReviews() {
-      try {
-        const response = await fetch(`${API_ENDPOINT}?action=getAnalytics`);
-        const data = await response.json();
-        // Implementation for showing approved reviews
-      } catch (error) {
-        console.error('Error loading approved reviews:', error);
-      }
-    }
+function truncate(str, n) {
+  return str && str.length > n ? str.slice(0, n) + '…' : (str || '');
+}
 
-    // Load Testimonials
-    async function loadTestimonials() {
-      try {
-        const response = await fetch(`${API_ENDPOINT}?action=getTestimonials`);
-        const testimonials = await response.json();
-        const container = document.getElementById('testimonialsList');
+function downloadShareCard() {
+  const canvas = document.getElementById('shareCanvas');
+  const a = document.createElement('a');
+  a.download = 'sajx-review-card.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
 
-        if (testimonials.length === 0) {
-          container.innerHTML = '<div class="empty-state"><h3>No Testimonials Yet</h3><p>Mark approved reviews as testimonials to feature them here.</p></div>';
-          return;
-        }
+/* ════════════════════════════════════════════
+   EXPORT CSV
+════════════════════════════════════════════ */
+function exportCSV() {
+  if (!allReviews || !allReviews.length) { showToast('Aucune donnée à exporter', 'error'); return; }
+  const headers = ['Nom', 'Commande', 'Produit', 'Note', 'Sentiment', 'Avis', 'WhatsApp'];
+  const rows = allReviews.map(r => [
+    r.clientName, r.orderId || r.orderID, r.product,
+    r.rating, r.sentiment, `"${(r.review || '').replace(/"/g,'""')}"`,
+    r.whatsapp || ''
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sajx-reviews-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  showToast('✓ Export CSV téléchargé', 'success');
+}
 
-        container.innerHTML = testimonials.map(t => `
-          <div class="review-item">
-            <div class="review-customer">${t.clientID}</div>
-            <div class="review-meta">
-              <span>${t.product}</span>
-              <span class="rating-stars">${'⭐'.repeat(t.rating)}</span>
-            </div>
-            <div class="review-text">"${t.review}"</div>
-          </div>
-        `).join('');
-      } catch (error) {
-        console.error('Error loading testimonials:', error);
-      }
-    }
+/* ════════════════════════════════════════════
+   MODAL HELPERS
+════════════════════════════════════════════ */
+function openModal(id)  { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
-    // Approve Review
-    async function approveReview(rowIndex) {
-      if (!confirm('Approve this review?')) return;
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
+});
 
-      try {
-        await fetch(API_ENDPOINT, {
-          method: 'POST',
-          body: new URLSearchParams({
-            action: 'approveReview',
-            rowIndex: rowIndex
-          })
-        });
+/* ════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + (type || '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = ''; }, 3200);
+}
 
-        loadPendingReviews();
-        loadAnalytics();
-      } catch (error) {
-        alert('Error approving review: ' + error.message);
-      }
-    }
+/* ════════════════════════════════════════════
+   UTILS
+════════════════════════════════════════════ */
+function getInitials(name) {
+  return (name || '?').trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
 
-    // Reject Review
-    async function rejectReview(rowIndex) {
-      const reason = prompt('Reason for rejection:');
-      if (!reason) return;
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 
-      try {
-        await fetch(API_ENDPOINT, {
-          method: 'POST',
-          body: new URLSearchParams({
-            action: 'rejectReview',
-            rowIndex: rowIndex,
-            reason: reason
-          })
-        });
-
-        loadPendingReviews();
-      } catch (error) {
-        alert('Error rejecting review: ' + error.message);
-      }
-    }
-
-    // Open Reply Modal
-    function openReplyModal(rowIndex, customerName) {
-      currentReviewRow = rowIndex;
-      document.getElementById('customerInfo').textContent = `Replying to ${customerName}`;
-      document.getElementById('replyText').value = '';
-      document.getElementById('replyModal').classList.add('show');
-    }
-
-    // Close Reply Modal
-    function closeReplyModal() {
-      document.getElementById('replyModal').classList.remove('show');
-    }
-
-    // Submit Reply
-    async function submitReply() {
-      const reply = document.getElementById('replyText').value.trim();
-      if (!reply) {
-        alert('Please write a reply');
-        return;
-      }
-
-      try {
-        await fetch(API_ENDPOINT, {
-          method: 'POST',
-          body: new URLSearchParams({
-            action: 'addAdminReply',
-            rowIndex: currentReviewRow,
-            reply: reply
-          })
-        });
-
-        closeReplyModal();
-        loadPendingReviews();
-      } catch (error) {
-        alert('Error submitting reply: ' + error.message);
-      }
-    }
-
-    // Mark as Testimonial
-    async function markTestimonial(rowIndex) {
-      try {
-        await fetch(API_ENDPOINT, {
-          method: 'POST',
-          body: new URLSearchParams({
-            action: 'markAsTestimonial',
-            rowIndex: rowIndex
-          })
-        });
-
-        loadPendingReviews();
-      } catch (error) {
-        alert('Error marking testimonial: ' + error.message);
-      }
-    }
-
-    // Export Reviews
-    function exportReviews() {
-      alert('Export functionality will be implemented with CSV export');
-    }
-  </script>
+function emptyState(title, msg) {
+  return `<div class="state-box"><h3>${title}</h3><p>${msg}</p></div>`;
+}
+</script>
 </body>
 </html>
+"
